@@ -84,11 +84,13 @@ char	*get_next_line(int fd)
 	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0 || BUFFER_SIZE > 2147483647)
 		return (NULL);
 	buff = read_file(fd, buff);
-	if (!buff)
-		return (NULL);
-	line = extract_line(buff);
-	if (!line)
+	if (!buff || buff[0] == '\0')
 		return (free(buff), buff = NULL, NULL);
-	buff = remainder(buff);
+	line = extract_line(buff);
+	if (!line || line[0] == '\0')
+		return (free(buff), buff = NULL, NULL);
+	buff = remainder_(buff);
+	
+	printf("gnl line : %s", line);
 	return (line);
 }
